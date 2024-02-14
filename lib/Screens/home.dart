@@ -30,6 +30,10 @@ class _HomeState extends State<Home> {
   late Future<List<AudioGet>> _audioFuture;
 
 
+
+  
+
+
   Future<List<AudioGet>> AudioGetApi() async{
     var homeResponse = await http.get(Uri.parse("https://podcastapp.gtcollege.in/api/audiouploadmasterget"));
     var audioData =jsonDecode(homeResponse.body);
@@ -61,11 +65,13 @@ class _HomeState extends State<Home> {
 
   }
 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Container(
+          //height: height,
           height: MediaQuery.of(context).size.height*1,
           width: MediaQuery.of(context).size.width*1,
           decoration: BoxDecoration(
@@ -280,42 +286,52 @@ class _HomeState extends State<Home> {
 
 
 
+                                  /// recmm author details in gridview for final
+
                                   SingleChildScrollView(
                                     child: Column(
                                       children: [
                                         Container(
                                           height: 270,
                                           //height: MediaQuery.of(context).size.height * .15,
-                                          width: MediaQuery.of(context).size.width *1,
+                                          width: MediaQuery.of(context).size.width *10,
                                           color: Color(0xff0f0617),
                                           child:
                                           GridView.builder(
                                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 4,
-                                              mainAxisSpacing: 3,
+                                              mainAxisSpacing: 20,
                                               crossAxisSpacing: 10,
                                             ),
                                             padding: EdgeInsets.all(10),
                                             itemCount: snapshot.data!.length,
-                                            //sscrollDirection: Axis.horizontal,
+                                            scrollDirection: Axis.vertical,
                                             itemBuilder: (context,index) {
-                                              return Container(
-                                                height: 5,
-                                        
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      height: 100,
-                                                      width:  200,
-                                                      decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                            image: NetworkImage("https://podcastapp.gtcollege.in/api${snapshot.data![index].authorProfilePicture}"),
-                                                        fit: BoxFit.fill),
+                                              return GestureDetector(
+                                              onTap:(){
+                                                Navigator.of(context).push(MaterialPageRoute(
+                                                    builder: (context)=>AuthorProfile(
+                                                      authorId: snapshot.data![index].sId.toString(),
+                                                    )));
+                                                },
+                                                child: Container(
+                                                  height: 5,
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                        height: 80,
+                                                        width:  200,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          image: DecorationImage(
+                                                              image: NetworkImage("https://podcastapp.gtcollege.in/api${snapshot.data![index].authorProfilePicture}"),
+                                                          fit: BoxFit.fill),
+                                                        ),
                                                       ),
-                                                    ),
-                                        
-                                                  ],
+
+                                                    ],
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -325,6 +341,13 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
 
+                                  Container(
+                                    height: 200,
+                                    width:  400,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.red)),
+
+                                  )
 
 
                                 ],
